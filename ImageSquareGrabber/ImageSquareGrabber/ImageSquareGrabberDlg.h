@@ -5,7 +5,9 @@
 #pragma once
 #include "afxcmn.h"
 #include "afxwin.h"
+#include "ImageAreaEx.h"
 
+#define INIT_SQUARE 200
 
 // CImageSquareGrabberDlg dialog
 class CImageSquareGrabberDlg : public CDialogEx
@@ -29,7 +31,6 @@ public:
 	CImage* m_curImage;
 	UINT m_width;
 	UINT m_height;
-	bool m_isDrawing;
 protected:
 	HICON m_hIcon;
 
@@ -38,8 +39,6 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	//afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	//afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
@@ -47,7 +46,9 @@ public:
 	CRichEditCtrl m_labelHeight;
 	CRichEditCtrl m_enterWidth;
 	CRichEditCtrl m_enterHeight;
-	CStatic m_imageArea;
+	CImageAreaEx m_imageArea;
+	//CImageAreaEx m_imageAreaTest;
 	CPoint m_mousePos;
 	afx_msg void OnStnDblclickImageArea();
+	afx_msg void OnBnClickedApplyButton();
 };

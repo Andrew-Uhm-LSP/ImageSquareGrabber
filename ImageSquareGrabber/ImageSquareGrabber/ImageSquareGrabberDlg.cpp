@@ -71,6 +71,7 @@ BEGIN_MESSAGE_MAP(CImageSquareGrabberDlg, CDialogEx)
 	ON_WM_MOUSEMOVE()
 	ON_WM_QUERYDRAGICON()
 	ON_STN_DBLCLK(IDC_IMAGE_AREA, &CImageSquareGrabberDlg::OnStnDblclickImageArea)
+	ON_BN_CLICKED(IDC_APPLY_BUTTON, &CImageSquareGrabberDlg::OnBnClickedApplyButton)
 END_MESSAGE_MAP()
 
 
@@ -106,17 +107,14 @@ BOOL CImageSquareGrabberDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// Add extra initialization here
-	m_labelWidth.SetWindowText(_T("Width"));
-	m_labelHeight.SetWindowText(_T("Height"));
+	CString widthText;
+	widthText.Format(_T("Current Width: %d"), INIT_SQUARE);
+	m_labelWidth.SetWindowText(widthText);
+	CString heightText;
+	heightText.Format(_T("Current Height: %d"), INIT_SQUARE);
+	m_labelHeight.SetWindowText(heightText);
 
-
-	// testing getting the static handle
-	//m_handle = CreateWindowEx();
-
-
-
-
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;
 }
 
 void CImageSquareGrabberDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -171,40 +169,8 @@ void CImageSquareGrabberDlg::OnPaint()
 			}
 		}
 
-		// draw 4 lines
-		CPen pen;
-		pen.CreatePen(PS_SOLID, 2, RGB(0,255,0));
-
-		CPen* pOldPen = dc.SelectObject(&pen);
-
-		// left
-		dc.MoveTo(m_mousePos.x + 10, m_mousePos.y + 10);
-		dc.LineTo(m_mousePos.x + 10, m_mousePos.y + 100);
-
-		// top
-		dc.MoveTo(m_mousePos.x + 10, m_mousePos.y + 10);
-		dc.LineTo(m_mousePos.x + 100, m_mousePos.y + 10);
-
-		// right
-		dc.MoveTo(m_mousePos.x + 100, m_mousePos.y + 10);
-		dc.LineTo(m_mousePos.x + 100, m_mousePos.y + 100);
-
-		// bottom
-		dc.MoveTo(m_mousePos.x + 100, m_mousePos.y + 100);
-		dc.LineTo(m_mousePos.x + 10, m_mousePos.y + 100);
-
-		dc.SelectObject(pOldPen);
-
 		CDialogEx::OnPaint();
 	}
-}
-
-void CImageSquareGrabberDlg::OnMouseMove(UINT nFlags, CPoint point)
-{
-	m_mousePos = point;
-
-	Invalidate();
-	CDialog::OnMouseMove(nFlags, point);
 }
 
 // The system calls this function to obtain the cursor to display while the user drags
@@ -214,7 +180,13 @@ HCURSOR CImageSquareGrabberDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
+void CImageSquareGrabberDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// switch focus here
+	//TRACE(_T("mouse moved in parent"));
+	SetFocus();
+	CDialog::OnMouseMove(nFlags, point);
+}
 
 void CImageSquareGrabberDlg::OnStnDblclickImageArea()
 {
@@ -231,6 +203,8 @@ void CImageSquareGrabberDlg::OnStnDblclickImageArea()
 		}
 
 		if (SUCCEEDED(m_curImage->Load(filePath))) {
+			m_imageArea.SetFileName(filePath);
+			m_imageArea.m_image = m_curImage;
 			CStatic* pStatic = (CStatic*)GetDlgItem(IDC_IMAGE_AREA);
 			CDC* pDC = pStatic->GetDC();
 			if (pDC && m_curImage->GetWidth() > 0 && m_curImage->GetHeight() > 0)
@@ -238,7 +212,48 @@ void CImageSquareGrabberDlg::OnStnDblclickImageArea()
 				CRect rect;
 				pStatic->GetClientRect(&rect);
 				m_curImage->StretchBlt(*pDC, rect, SRCCOPY);
+				/*int bitDepth = m_curImage->GetBPP();
+				TRACE(_T("Bit Depth: %d\n"), bitDepth);*/
 			}
 		}
+	}
+}
+
+
+
+void CImageSquareGrabberDlg::OnBnClickedApplyButton()
+{
+	int bitDepth = m_curImage->GetBPP();
+	TRACE(_T("Bit Depth: %d\n"), bitDepth);
+
+	CString width;
+	CString widthText;
+	m_enterWidth.GetWindowText(width);
+	if (width.IsEmpty()) {
+		m_imageArea.SetWidth(INIT_SQUARE);
+		widthText.Format(_T("Current Width: %d"), INIT_SQUARE);
+		m_labelWidth.SetWindowText(widthText);
+	}
+	else {
+		UINT val = _ttoi(width);
+		m_imageArea.SetWidth(val);
+		widthText.Format(_T("Current Width: %d"), val);
+		m_labelWidth.SetWindowText(widthText);
+	}
+		
+
+	CString height;
+	CString heightText;
+	m_enterHeight.GetWindowText(height);
+	if (height.IsEmpty()) {
+		m_imageArea.SetHeight(INIT_SQUARE);
+		heightText.Format(_T("Current Height: %d"), INIT_SQUARE);
+		m_labelHeight.SetWindowText(heightText);
+	}
+	else {
+		UINT val = _ttoi(height);
+		m_imageArea.SetHeight(val);
+		heightText.Format(_T("Current Height: %d"), val);
+		m_labelHeight.SetWindowText(heightText);
 	}
 }

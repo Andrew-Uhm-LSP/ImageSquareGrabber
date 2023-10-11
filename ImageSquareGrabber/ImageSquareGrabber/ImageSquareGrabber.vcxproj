@@ -185,6 +185,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ImageAreaEx.h" />
     <ClInclude Include="ImageSquareGrabber.h" />
     <ClInclude Include="ImageSquareGrabberDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImageAreaEx.cpp" />
     <ClCompile Include="ImageSquareGrabber.cpp" />
     <ClCompile Include="ImageSquareGrabberDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
