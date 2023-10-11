@@ -165,7 +165,13 @@ void CImageSquareGrabberDlg::OnPaint()
 			{
 				CRect rect;
 				pStatic->GetClientRect(&rect);
-				m_curImage->StretchBlt(*pDC, rect, SRCCOPY);
+
+				int srcWidth = m_curImage->GetWidth();
+				int srcHeight = m_curImage->GetHeight();
+				int destWidth = rect.Width();
+				int destHeight = (srcHeight * destWidth) / srcWidth; // Maintain aspect ratio
+
+				m_curImage->StretchBlt(*pDC, 0, 0, destWidth, destHeight, SRCCOPY);
 			}
 		}
 
@@ -211,7 +217,13 @@ void CImageSquareGrabberDlg::OnStnDblclickImageArea()
 			{
 				CRect rect;
 				pStatic->GetClientRect(&rect);
-				m_curImage->StretchBlt(*pDC, rect, SRCCOPY);
+
+				int srcWidth = m_curImage->GetWidth();
+				int srcHeight = m_curImage->GetHeight();
+				int destWidth = rect.Width();
+				int destHeight = (srcHeight * destWidth) / srcWidth; // Maintain aspect ratio
+
+				m_curImage->StretchBlt(*pDC, 0, 0, destWidth, destHeight, SRCCOPY);
 				/*int bitDepth = m_curImage->GetBPP();
 				TRACE(_T("Bit Depth: %d\n"), bitDepth);*/
 			}

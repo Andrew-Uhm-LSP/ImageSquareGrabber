@@ -7,7 +7,7 @@
 #include "afxwin.h"
 #include "ImageAreaEx.h"
 
-#define INIT_SQUARE 200
+#define INIT_SQUARE 80
 
 // CImageSquareGrabberDlg dialog
 class CImageSquareGrabberDlg : public CDialogEx

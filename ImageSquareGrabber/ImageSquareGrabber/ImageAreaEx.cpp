@@ -4,11 +4,6 @@
 #include "afxdialogex.h"
 #include "ImageAreaEx.h"
 
-//#include <opencv2/core.hpp>
-//#include <opencv2/highgui.hpp>
-
-using namespace Gdiplus;
-
 IMPLEMENT_DYNAMIC(CImageAreaEx, CStatic)
 
 CImageAreaEx::CImageAreaEx()
